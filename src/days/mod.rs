@@ -41,7 +41,8 @@ pub enum Day {
 pub fn get_day_fn(day: Day) -> (DayFn, DayFn) {
     match day {
         Day::Day1 => (day1::part_one, day1::part_two),
-        day=> { println!("{:?} is not yet implemented!", day); 
+        day => {
+            println!("{:?} is not yet implemented!", day);
             (no_op, no_op)
         }
     }
@@ -62,7 +63,7 @@ impl From<Day> for String {
 
 impl Display for Day {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let string : String = self.clone().into();
-       write!(f, "{}", string)
+        let string: String = self.clone().into();
+        write!(f, "{}", string)
     }
 }

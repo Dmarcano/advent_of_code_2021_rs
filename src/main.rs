@@ -4,7 +4,7 @@ pub mod libs;
 
 use days::Day;
 
-use libs::{get_input, SessionID, solve_day};
+use libs::{get_input, solve_day, SessionID};
 use reqwest::blocking::Client;
 
 fn main() {
