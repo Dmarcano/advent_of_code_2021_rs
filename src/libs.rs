@@ -1,25 +1,42 @@
+use reqwest::{
+    blocking::{Client, ClientBuilder, RequestBuilder, Response},
+    Url,
+};
+
+use crate::days::{Day, get_day_fn}; 
+
 use serde_json::Value;
 use std::fs::read_to_string;
-use reqwest::{blocking::{Client, ClientBuilder, RequestBuilder},  Url};
 
+pub fn solve_day(day : Day, input : String) { 
+    let (part_one, part_two) = get_day_fn(day); 
+    let result_one = part_one(input);
+    let result_two = part_two(result_one.clone());
+    println!("Day {} part one: {}", day, result_one);
+    println!("Day {} part two: {}", day, result_two);
+}
 
-pub fn get_input(client : &Client, SessionID { id }: &SessionID) { 
+pub fn get_input(client: &Client, SessionID { id }: &SessionID, day : Day ) -> Response {
     // https://adventofcode.com/2021/day/1/input
-    let url = Url::parse("https://adventofcode.com/2021/day/1/input").unwrap();
-    let request =client.get(url).header("cookie", format!("session={}", id)).build().unwrap();
+    let url =format!("https://adventofcode.com/2021/{}/input", day.to_string());
+    let url = Url::parse(&url).unwrap();
+    let request = client
+        .get(url)
+        .header("cookie", format!("session={}", id))
+        .build()
+        .unwrap();
     println!("{:#?}", request);
 
-    let resp = client.execute(request).unwrap();
-
-    println!("{:#?}", resp.text().unwrap());
-
+    client
+        .execute(request)
+        .map_err(|e| format!("Error executing request {}", e))
+        .unwrap()
 }
 
 #[derive(Debug, Clone)]
 pub struct SessionID {
     pub id: String,
 }
-
 
 impl SessionID {
     pub fn new() -> Result<SessionID, &'static str> {

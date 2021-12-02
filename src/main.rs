@@ -1,11 +1,18 @@
-mod lib;
-pub mod days; 
+pub mod days;
 
+pub mod libs;
+
+use days::Day;
+
+use libs::{get_input, SessionID, solve_day};
 use reqwest::blocking::Client;
-use lib::{get_input, SessionID};
 
 fn main() {
     let client = Client::new();
     let session_id = SessionID::new().unwrap();
-    get_input(&client, &session_id);
+    let day = Day::Day1;
+
+    let response = get_input(&client, &session_id, day);
+    let input = response.text().unwrap();
+    solve_day(day, input)
 }
