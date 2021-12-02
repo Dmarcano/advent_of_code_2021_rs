@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{fmt::Display, str::FromStr};
 
 mod day1;
 
@@ -65,5 +65,41 @@ impl Display for Day {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let string: String = self.clone().into();
         write!(f, "{}", string)
+    }
+}
+
+impl FromStr for Day {
+    type Err = &'static str;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "1" => Ok(Day::Day1),
+            "2" => Ok(Day::Day2),
+            "3" => Ok(Day::Day3),
+            "4" => Ok(Day::Day4),
+            "5" => Ok(Day::Day5),
+            "6" => Ok(Day::Day6),
+            "7" => Ok(Day::Day7),
+            "8" => Ok(Day::Day8),
+            "9" => Ok(Day::Day9),
+            "10" => Ok(Day::Day10),
+            "11" => Ok(Day::Day11),
+            "12" => Ok(Day::Day12),
+            "13" => Ok(Day::Day13),
+            "14" => Ok(Day::Day14),
+            "15" => Ok(Day::Day15),
+            "16" => Ok(Day::Day16),
+            "17" => Ok(Day::Day17),
+            "18" => Ok(Day::Day18),
+            "19" => Ok(Day::Day19),
+            "20" => Ok(Day::Day20),
+            "21" => Ok(Day::Day21),
+            "22" => Ok(Day::Day22),
+            "23" => Ok(Day::Day23),
+            "24" => Ok(Day::Day24),
+            "25" => Ok(Day::Day25),
+            _ => Err("Invalid day passed in. Please use a number between 1 and 25"),
+        }
+
     }
 }
