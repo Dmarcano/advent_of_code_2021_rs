@@ -1,6 +1,5 @@
 use crate::days::{get_day_fn, Day};
 
-
 pub fn solve_day(day: Day, input: String) {
     let (part_one, part_two) = get_day_fn(day);
     let result_one = part_one(input.clone());

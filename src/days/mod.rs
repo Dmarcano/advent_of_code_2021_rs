@@ -38,6 +38,19 @@ pub enum Day {
     Day25,
 }
 
+impl Day {
+    pub fn to_u8(&self) -> u8 {
+        match self {
+            Day::Day1 => 1,
+            Day::Day2 => 2,
+            Day::Day3 => 3,
+            Day::Day4 => 4,
+            Day::Day5 => 5,
+            _ => todo!(),
+        }
+    }
+}
+
 pub fn get_day_fn(day: Day) -> (DayFn, DayFn) {
     match day {
         Day::Day1 => (day1::part_one, day1::part_two),
@@ -100,6 +113,5 @@ impl FromStr for Day {
             "25" => Ok(Day::Day25),
             _ => Err("Invalid day passed in. Please use a number between 1 and 25"),
         }
-
     }
 }

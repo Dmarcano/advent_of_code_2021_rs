@@ -3,11 +3,11 @@ pub mod libs;
 pub mod utils;
 
 use days::Day;
+use libs::solve_day;
 use std::env;
 use std::io;
 use std::str::FromStr;
-use libs::{ solve_day};
-use utils::{get_input::{get_input }};
+use utils::get_input::get_input;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
