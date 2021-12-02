@@ -1,6 +1,9 @@
+use crate::{days::{ Day}};
 
+use serde_json::Value;
+use std::fs::read_to_string;
 use reqwest::{
-    blocking::{Client, ClientBuilder, RequestBuilder, Response},
+    blocking::{Client, Response},
     Url,
 };
 
@@ -27,20 +30,17 @@ impl SessionID {
     }
 }
 
-use crate::{days::{get_day_fn, Day}};
-
-use serde_json::Value;
-use std::fs::read_to_string;
-
 /// gets an input for a given day 
 pub fn get_input(day : Day) -> String { 
 
     if let Ok(input) = get_input_file(day) { 
         input
     } else { 
+        println!("Could not find input for day {}, Querying the AOC server", day);
         let response = get_input_web(day); 
         let input = response.text().unwrap();
-        save_input_file(day, &input);
+        println!("Got input for day, trying to save to data/input directory");
+        let _ = save_input_file(day, &input).map_err(|e_| {println!("{}", e_)});
         input 
     }
 }
@@ -62,16 +62,17 @@ fn get_input_web(day : Day) -> Response {
         .map_err(|e| format!("Error executing request {}", e))
         .unwrap()
 
-}
+}   
 
 /// tries to get the input for the given day from the local file system
-fn get_input_file(day : Day) -> Result<String,  &'static str> { 
+fn get_input_file(_day : Day) -> Result<String,  &'static str> { 
     Err("Not implemented")
 }
 
 /// Tries to save an input for the given day to the local file system
-fn save_input_file(day : Day, input : &str) -> Result<(), &'static str> { 
-    Err("Not implemented")
+fn save_input_file(day : Day, input : &str) -> Result<(), String> { 
+    let path = format!("data/input/{}.txt", day.to_string());
+    std::fs::write(path, input).map_err(|e| format!("Could not write to file: {}", e))
 }
 
 
