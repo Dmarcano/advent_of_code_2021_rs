@@ -31,7 +31,6 @@ pub fn part_two(input: String) -> String {
 
     input_lines.windows(3).map(|window| {
         let sum = window[0] + window[1] + window[2];
-        println!("{:#?}", sum);
         return sum
     }
     ).reduce(|val_1, val_2| {

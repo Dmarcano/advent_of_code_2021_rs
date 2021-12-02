@@ -25,7 +25,6 @@ pub fn get_input(client: &Client, SessionID { id }: &SessionID, day: Day) -> Res
         .header("cookie", format!("session={}", id))
         .build()
         .unwrap();
-    println!("{:#?}", request);
 
     client
         .execute(request)
