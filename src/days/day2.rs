@@ -8,9 +8,43 @@ enum Directions {
 }
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+struct AimSubmarineLoc { 
+    pub depth : i32, 
+    pub x : i32,
+    pub aim: i32, 
+}
+
+impl Add<Directions> for AimSubmarineLoc {
+    type Output = Self;
+
+    fn add(self, rhs: Directions) -> Self::Output {
+
+        match rhs {
+            Directions::Up(aim_decrease) => Self { 
+                depth: self.depth, 
+                x: self.x, 
+                aim: self.aim - aim_decrease, 
+            },
+            Directions::Down(aim_increase) => Self { 
+                depth: self.depth, 
+                x: self.x,
+                aim: self.aim + aim_increase,
+            },
+            Directions::Forward(motion_amnt) => Self { 
+                depth: self.depth +  (self.aim * motion_amnt), 
+                x: self.x + motion_amnt,
+                aim: self.aim,
+            },
+        }
+    }
+}
+
+
+/// A submarine location for part one of day two for the advent of code 2021
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 struct SubmarineLoc {
-    depth: i32,
-    x: i32,
+    pub depth: i32,
+    pub x: i32,
 }
 
 impl Add<Directions> for SubmarineLoc {
@@ -56,11 +90,26 @@ impl Directions {
 pub fn part_one(input: String) -> String {
     let loc = SubmarineLoc { depth: 0, x: 0 };
 
-    "Day2: not implemented".to_string()
+    let input_lines = input
+        .lines()
+        .map(|x| Directions::from_input_line(x).unwrap())
+        .collect::<Vec<_>>();
+
+        let final_loc = input_lines.iter().fold(loc, |acc, x| acc + *x);
+        (final_loc.x * final_loc.depth).to_string()
 }
 
 pub fn part_two(input: String) -> String {
-    "Day2: not implemented".to_string()
+    let loc = AimSubmarineLoc { depth: 0, x: 0, aim: 0 };
+
+    let input_lines = input
+        .lines()
+        .map(|x| Directions::from_input_line(x).unwrap())
+        .collect::<Vec<_>>();
+
+        let final_loc = input_lines.iter().fold(loc, |acc, x| acc + *x);
+        (final_loc.x * final_loc.depth).to_string()
+
 }
 
 
@@ -82,5 +131,11 @@ mod test {
         assert_eq!(loc + Directions::Down(1), SubmarineLoc { depth: 1, x: 0 });
         assert_eq!(loc + Directions::Forward(1), SubmarineLoc { depth: 0, x: 1 });
         assert_eq!(loc + Directions::Down(5) + Directions::Up(3) + Directions::Forward(10), SubmarineLoc { depth: 2, x: 10 });
+    }
+
+    #[test]
+    fn submarine_aim_addition_test() { 
+        let loc = AimSubmarineLoc { depth: 0, x: 0, aim: 0 };
+        assert_eq!(loc + Directions::Forward(5) + Directions::Down(5) + Directions::Forward(8), AimSubmarineLoc { depth: 40, x: 13, aim: 5 });
     }
 }
