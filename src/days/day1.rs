@@ -22,5 +22,26 @@ pub fn part_one(input: String) -> String {
 }
 
 pub fn part_two(input: String) -> String {
-    "Havent done part one yet!".to_string()
+    let input_lines = input
+    .lines()
+    .map(|x| x.parse::<i32>().unwrap())
+    .collect::<Vec<_>>();
+
+    let mut count = 0;
+
+    input_lines.windows(3).map(|window| {
+        let sum = window[0] + window[1] + window[2];
+        println!("{:#?}", sum);
+        return sum
+    }
+    ).reduce(|val_1, val_2| {
+        if val_1 < val_2 {
+            count += 1;
+        }
+        return val_2;
+    });
+
+    println!("{:#?}", count);
+
+    count.to_string()
 }
