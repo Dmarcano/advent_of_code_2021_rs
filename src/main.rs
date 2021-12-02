@@ -1,13 +1,13 @@
 pub mod days;
-
 pub mod libs;
+pub mod utils;
 
 use days::Day;
 use std::env;
 use std::io;
 use std::str::FromStr;
-use libs::{get_input, solve_day, SessionID};
-use reqwest::blocking::Client;
+use libs::{ solve_day};
+use utils::{get_input::{get_input }};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -25,11 +25,6 @@ fn main() {
 
     let day = Day::from_str(&day_arg).unwrap();
 
-
-    let client = Client::new();
-    let session_id = SessionID::new().unwrap();
-
-    let response = get_input(&client, &session_id, day);
-    let input = response.text().unwrap();
+    let input = get_input(day);
     solve_day(day, input)
 }
