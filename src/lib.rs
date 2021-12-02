@@ -1,10 +1,25 @@
 use serde_json::Value;
 use std::fs::read_to_string;
+use reqwest::{blocking::{Client, ClientBuilder, RequestBuilder},  Url};
+
+
+pub fn get_input(client : &Client, SessionID { id }: &SessionID) { 
+    // https://adventofcode.com/2021/day/1/input
+    let url = Url::parse("https://adventofcode.com/2021/day/1/input").unwrap();
+    let request =client.get(url).header("cookie", format!("session={}", id)).build().unwrap();
+    println!("{:#?}", request);
+
+    let resp = client.execute(request).unwrap();
+
+    println!("{:#?}", resp.text().unwrap());
+
+}
 
 #[derive(Debug, Clone)]
 pub struct SessionID {
     pub id: String,
 }
+
 
 impl SessionID {
     pub fn new() -> Result<SessionID, &'static str> {
