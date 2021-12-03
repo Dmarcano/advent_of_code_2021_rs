@@ -2,6 +2,7 @@ use std::{fmt::Display, str::FromStr};
 
 mod day1;
 mod day2;
+mod day3;
 
 pub type DayFn = fn(String) -> String;
 
@@ -56,6 +57,7 @@ pub fn get_day_fn(day: Day) -> (DayFn, DayFn) {
     match day {
         Day::Day1 => (day1::part_one, day1::part_two),
         Day::Day2 => (day2::part_one, day2::part_two),
+        Day::Day3 => (day3::part_one, day3::part_two),
         day => {
             println!("{:?} is not yet implemented!", day);
             (no_op, no_op)
