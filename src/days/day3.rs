@@ -30,18 +30,86 @@ pub fn part_one(input: String) -> String {
         .collect::<Vec<_>>();
     let number_of_lines = line_values.len();
 
-    let final_out = line_values.into_iter().reduce(|acc, line| {
-        acc.iter()
-            .zip(line)
-            .map(|(a, b)| *a + b)
-            .collect::<Vec<u32>>()
-    }).unwrap();
+    let final_out = line_values
+        .into_iter()
+        .reduce(|acc, line| {
+            acc.iter()
+                .zip(line)
+                .map(|(a, b)| *a + b)
+                .collect::<Vec<u32>>()
+        })
+        .unwrap();
 
     let (gamma, epsilon) = gen_gamma_rate(final_out, number_of_lines as u32);
-    (gamma*epsilon).to_string()
+    (gamma * epsilon).to_string()
 }
 
+fn get_most_significant_bits(input: &str) -> String {
+    let line_values = input
+        .lines()
+        .map(|line| parse_line(line))
+        .collect::<Vec<_>>();
+    let number_of_lines = line_values.len() as u32;
+
+    // here we take a 2-D array of bits and "flatten" by summing each row over it's columns
+    let flattened_bits = line_values
+        .into_iter()
+        .reduce(|acc, line| {
+            acc.iter()
+                .zip(line)
+                .map(|(a, b)| *a + b)
+                .collect::<Vec<u32>>()
+        })
+        .unwrap();
+
+    flattened_bits
+        .iter()
+        .map(|val| (val / (number_of_lines / 2)))
+        .map(|val| val.to_string())
+        .collect()
+}
+
+
 pub fn part_two(input: String) -> String {
+    // this is a Vec where the i-th index contains the the String '0' or '1' which corresponds to the most
+    // significant bit of the i-th column in the input
+    let most_significant_bits = get_most_significant_bits(&input);
+    let least_significant_bits = most_significant_bits
+        .chars()
+        .map(|c| if c == '1' { '0' } else { '1' })
+        .collect::<String>();
+
+
+    let filter_by_idx  = |input: &str, bit_str: &str, idx: usize| {
+        let filter_char = bit_str.chars().nth(idx).unwrap();
+        input
+            .lines()
+            .filter(|line| line.chars().nth(idx).unwrap() == filter_char)
+            .map(|filtered| filtered.to_string())
+            .collect::<Vec<String>>()
+            .join("\n")
+    };
+
+    let mut most_significant_lines = input.clone(); 
+    let mut least_significant_lines = input.clone();
+
+    for i in 0..most_significant_bits.len() {
+        most_significant_lines = filter_by_idx(&most_significant_lines, &most_significant_bits, i);
+        if most_significant_lines.len() < 1 { 
+            break
+        }
+    }
+    
+    for i in 0..least_significant_lines.len() {
+        least_significant_lines = filter_by_idx(&least_significant_lines, &least_significant_lines, i);
+        if least_significant_lines.len() < 1 { 
+            break
+        }
+    }
+
+    let gamma = u32::from_str_radix(&most_significant_lines, 2).unwrap();
+    let epsilon = u32::from_str_radix(&least_significant_lines, 2).unwrap();
+
     "not implemented".to_string()
 }
 
